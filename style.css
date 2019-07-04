@@ -1,0 +1,22 @@
+.container {
+  margin: 200px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+form > * {
+  display: block;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+input {
+  margin-bottom: 16px;
+}
+
+[type="checkbox"],
+#read {
+  display: inline-block;
+}
