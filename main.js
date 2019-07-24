@@ -1,27 +1,20 @@
-const library = document.querySelector(".library");
+let library = [];
 
-let myLibrary = [];
-
-const Book = function (title, author, pages, read = false) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  
-  Book.prototype.info = () => {
-    let isRead = read ? "read" : "not read yet";
-    let info = title + " by " + author + ", " + pages + " pages, " + isRead;
-    return info;
+class Book {
+  constructor(name, author, pages, read) {
+    this.name = name,
+    this.author = author,
+    this.pages = pages,
+    this.read = read 
   }
 }
 
-function addBook(book) {
-  myLibrary.push(book);
+Book.prototype.info = function() { 
+  return this.name + " by " + this.author + ", " + this.pages + " pages, " + this.read + ".";}
+
+const book = new Book("Brave New World", "Aldous Huxley", 230, "read");
+console.log(book.info());
+
+function addBookToLibrary(book) {
+  
 }
-
-let book1 = new Book("Free Will", "Sam Harris", 155, true);
-let book2 = new Book("The Other America", "Michael Harrington", 163, true);
-addBook(book1.info());
-addBook(book2.info());
-
-library.innerHTML = myLibrary;
