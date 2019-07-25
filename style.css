@@ -1,0 +1,33 @@
+.book__card {
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 600px;
+}
+
+.book__title {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.btn {
+  font-size: 16px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 3px;
+}
+
+.btn--read {
+  background: lightgreen;
+  content: "READ";
+}
+
+.btn--unread {
+  content: "UNREAD";
+  background: lightcoral;
+  color: #fff;
+}
