@@ -1,41 +1,92 @@
-.library {
-  width: 600px;
-  height: 700px;
-  border: 1px solid rgb(231, 231, 231);
-  background: rgb(223, 223, 223);
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: left;
-  /* display: grid; */
-  /* grid-template-columns: repeat(4, auto); */
-}
-
-.library__header {
-  padding: 10px 20px;
-  display: grid;
-  grid-template-columns: 2fr 2fr 100px 1fr;
-  gap: 10px;
-  background: #fff;
-  text-transform: uppercase;
-  font-size: 12px;
+* {
+  margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 2px 10px 0 rgb(177, 177, 177);
 }
 
-.library__header > h2 {
-  font-weight: 300;
+.header {
+  height: 250px;
+  background: url("https://source.unsplash.com/random") no-repeat center / cover;
 }
 
-.library__content {
-  padding: 10px 5px;
+.main-heading {
+  font-size: 48px;
 }
 
-.book {
-  padding: 5px 10px;
-  background: #fff;
-  display: grid;
-  grid-template-columns: 2fr 2fr 100px 1fr;
-  gap: 10px;
+.btn {
+  padding: 10px;
+  background: none;
+  border: 1px solid rgb(194, 194, 194);
   border-radius: 5px;
-  text-transform: uppercase;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  width: 300px;
+  padding: 10px;
+  margin: 0 5px;
+}
+
+.column__heading {
+  margin-bottom: 10px;
+}
+
+/* Form */
+
+.book-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-form > label {
+  margin-bottom: 5px;
+}
+
+.book-form > input {
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 3px;
+}
+
+/* Book Card */
+
+.book__card {
+  box-shadow: 0 0 5px 0 rgb(179, 179, 179);
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.book__card > * {
+  padding: 5px;
+}
+
+.book__title {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 16px;
+}
+
+.book__year,
+.book__category {
+  font-size: 14px;
+}
+
+.book__category {
+  background: lightsalmon;
+  width: fit-content;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.book__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

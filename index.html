@@ -8,33 +8,56 @@
   <title>Book List</title>
 </head>
 <body>
-  <div class="container">
-    <!-- <form name="new-book" method="POST">
-      <label for="title">Title</label>
-      <input id="title" type="text">
-      <label for="author">Author</label>
-      <input type="text" id="author">
-      <label for="publish">Publish Year</label>
-      <input id="publish" type="date">
-      <label for="status">Read</label>
-      <input id="status" type="checkbox">
-    </form> -->
-    <div class="library library__read">
-      <div class="library__header">
-        <h2>Title</h2>
-        <h2>Author</h2>
-        <h2>Year</h2>
-        <h2>Publisher</h2>
+  <section class="header"></section>
+  <main>
+    <h1 class="main-heading">Books</h1>
+    <div class="container">
+      <div class="column">
+        <form name="book-form" class="book-form">
+          <h2 class="column__heading">Add Book</h2>
+          <label for="title">Title</label>
+          <input type="text" id="title">
+          <label for="author">Author</label>
+          <input type="text" id="author">
+          <label for="year">Year</label>
+          <input type="text" id="year">
+          <label for="category">Category</label>
+          <input type="text" id="category">
+          <label for="status">Read</label>
+          <input type="checkbox" id="read">
+          <label for="tags"></label>
+          <select name="tags" id="tags">
+            <option value="novel">Novel</option>
+            <option value="non-fiction">Non-Fiction</option>
+            <option value="economics">Economics</option>
+          </select>
+          <button type="button" class="btn btn--add">Add Book</button>
+          <button type="button" class="btn" onclick="fillInputs()">Fill Inputs</button>
+        </form>
       </div>
-      <div class="library__content">
-        <div class="book">
-          <p class="book__title">Brave New World</p>
+      <div class="column column__read">
+        <h2 class="column__heading">Read</h2>
+        <div class="book__card" draggable="true">
+          <p class="book__title" contenteditable>Brave New World</p>
           <p class="book__author">Aldous Huxley</p>
-          <p class="book__year">1932</p>
-          <p class="book__publisher">Penguin </p>
+          <div class="book__footer">
+            <p class="book__year">1932</p>
+            <p class="book__category">Novel</p>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="column column__not-read">
+        <h2 class="column__heading">To Read</h2>
+        <div class="book__card" draggable="true">
+          <p class="book__title">Notes On A Nervous Planet</p>
+          <p class="book__author">Matt Haig</p>
+          <div class="book__footer">
+            <p class="book__year">2017</p>
+            <p class="book__category">Self-Help</p>
+          </div>
+        </div>
+      </div>
+  </main>
     <script src="main.js"></script>
 </body>
 </html>
