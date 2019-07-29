@@ -4,13 +4,24 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.header {
+body {
+  background: rgb(255, 252, 238);
+}
+
+.banner {
   height: 250px;
   background: url("https://source.unsplash.com/random") no-repeat center / cover;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
 .main-heading {
   font-size: 48px;
+  margin-right: 20px;
 }
 
 .btn {
@@ -21,12 +32,16 @@
 }
 
 .container {
+  position: relative;
   display: flex;
   justify-content: center;
+  border-top: 1px solid rgb(196, 196, 196);
+  /* width: fit-content; */
 }
 
 .column {
   width: 300px;
+  min-height: 500px;
   padding: 10px;
   margin: 0 5px;
 }
@@ -40,6 +55,30 @@
 .book-form {
   display: flex;
   flex-direction: column;
+  width: 300px;
+  position: absolute;
+  padding: 10px 20px;
+  left: -400px;
+  opacity: 0;
+  top: 10px;
+  transition: .5s;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgb(179, 179, 179);
+  z-index: 2;
+}
+
+.book-form.shown {
+  left: 20px;
+  opacity: 1;
+}
+
+.btn--close {
+  position: absolute;
+  top: 20px;
+  font-size: 12px;
+  right: 20px;
+  padding: 5px 10px;
 }
 
 .book-form > label {
@@ -56,15 +95,25 @@
 /* Book Card */
 
 .book__card {
+  position: relative;
   box-shadow: 0 0 5px 0 rgb(179, 179, 179);
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fff;
 }
 
 .book__card > * {
   padding: 5px;
+}
+
+.btn__delete {
+  position: absolute;
+  top: 15px;
+  font-size: 12px;
+  right: 20px;
+  padding: 5px 10px;
 }
 
 .book__title {

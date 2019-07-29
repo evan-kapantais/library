@@ -5,10 +5,23 @@ const authorInput = document.querySelector("#author");
 const yearInput = document.querySelector("#year");
 const categoryInput = document.querySelector("#category");
 const readInput = document.querySelector("#read");
-
+const form = document.querySelector(".book-form");
 const btnAddBook = document.querySelector(".btn--add");
+const btnShowForm = document.querySelector(".btn--show");
+const btnCloseForm = document.querySelector(".btn--close");
+
+
+btnShowForm.addEventListener("click", showForm);
+btnCloseForm.addEventListener("click", closeForm);
 btnAddBook.addEventListener("click", getBookInfo);
 
+function showForm() {
+  form.classList.add("shown");
+}
+
+function closeForm() {
+  form.classList.remove("shown");
+}
 
 class Book {
   constructor(title, author, year, category, read) {
@@ -18,10 +31,6 @@ class Book {
     this.category = category,
     this.read = read
   }
-}
-
-Book.prototype.info = function() { 
-  return this.title, this.author, this.year, this.category, this.read;
 }
 
 function getBookInfo() {
@@ -42,12 +51,14 @@ function addBookToLibrary(book) {
 function renderBookCard(book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book__card");
-  bookCard.innerHTML = `<p class="book__title">${book.title}</p>
+  bookCard.innerHTML = `<button class="btn btn__delete">X</button>
+                        <p class="book__title">${book.title}</p>
                         <p class="book__author">${book.author}</p>
                         <div class="book__footer">
                           <p class="book__year">${book.year}</p>
                           <p class="book__category">${book.category}</p>
                         </div>`;
+  
   if (book.read == true) {
     const readColumn = document.querySelector(".column__read");
     readColumn.appendChild(bookCard);
@@ -55,6 +66,16 @@ function renderBookCard(book) {
     const notReadColumn = document.querySelector(".column__not-read");
     notReadColumn.appendChild(bookCard);
   }
+
+  const btnDelete = bookCard.querySelector(".btn__delete");
+  btnDelete.addEventListener("click", deleteItem);
+}
+
+function deleteItem(e) {
+  const cardItem = e.target.parentNode;
+  const column = cardItem.parentNode;
+
+  column.removeChild(cardItem);
 }
 
 function fillInputs() {
@@ -64,5 +85,3 @@ function fillInputs() {
   categoryInput.value = "Non-Fiction";
   readInput.checked = true;
 }
-
-// fillInputs();
