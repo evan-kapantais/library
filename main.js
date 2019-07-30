@@ -30,14 +30,13 @@ class Book {
     this.author = author,
     this.year = year,
     this.category = category,
-    this.read = read,
-    this.index = index
+    this.read = read
   }
 }
 
 function getBookInfo() {
   const book = new Book(titleInput.value, authorInput.value, 
-  yearInput.value, categoryInput.value, readInput.checked, bookIndex);
+  yearInput.value, categoryInput.value, readInput.checked);
 
   addBookToLibrary(book);
   renderBookCard(book);
@@ -48,9 +47,9 @@ function addBookToLibrary(book) {
   _library.push(book);
 
   if (localStorage.getItem("library")) {
-    const localLibrary = JSON.parse(localStorage.getItem("library"));
-    localLibrary.push(book);
-    localStorage.setItem("library", JSON.stringify(localLibrary));
+    const library = JSON.parse(localStorage.getItem("library"));
+    library.push(book);
+    localStorage.setItem("library", JSON.stringify(library));
   } else {
     localStorage.setItem("library", JSON.stringify(_library));
   }
@@ -63,7 +62,6 @@ function renderLibrary() {
     console.log("Library Found");
     const library = JSON.parse(localStorage.getItem("library"));
     library.forEach(book => {
-      localBookIndex = book.index;
       renderBookCard(book);
     });
   }
@@ -72,6 +70,8 @@ function renderLibrary() {
 function renderBookCard(book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book__card");
+  bookCard.setAttribute("data-key", book.title);
+
   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
                         <p class="book__title">${book.title}</p>
                         <p class="book__author">${book.author}</p>
@@ -79,9 +79,6 @@ function renderBookCard(book) {
                           <p class="book__year">${book.year}</p>
                           <p class="book__category">${book.category}</p>
                         </div>`;
-  
-  bookCard.setAttribute("data-index", bookIndex);
-  bookIndex++;
 
   if (book.read == true) {
     const readColumn = document.querySelector(".column__read");
@@ -96,22 +93,15 @@ function renderBookCard(book) {
 }
 
 function deleteItem(e) {
-  const cardItem = e.target.parentNode;
-  const column = cardItem.parentNode;
+  const card = e.target.parentNode;
+  const column = card.parentNode;
 
-  column.removeChild(cardItem);
-  const retreivedLibrary = JSON.parse(localStorage.getItem("library"));
-  console.log(retreivedLibrary);
+  column.removeChild(card);
+  const library = JSON.parse(localStorage.getItem("library"));
+  console.log(library);
 
-  retreivedLibrary.forEach((book) => {
-    const currentCardIndex = cardItem.getAttribute("data-index");
-    console.log(currentCardIndex);
-
-    if (currentCardIndex == book.index) {
-      const newLibrary = retreivedLibrary.filter(book => book.index != currentCardIndex);
-      localStorage.setItem("library", JSON.stringify(newLibrary));
-    }
-  });
+  const filteredLibrary = library.filter(book => book.title != card.getAttribute("data-key"));
+  localStorage.setItem("library", JSON.stringify(filteredLibrary));
 }
 
 function fillInputs() {
