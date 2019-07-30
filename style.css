@@ -5,18 +5,21 @@
 }
 
 body {
-  background: rgb(255, 252, 238);
+  /* background: rgb(255, 251, 231); */
+  background: #F2EBD9;
+  overflow: hidden;
 }
 
 .banner {
   height: 250px;
-  background: url("https://source.unsplash.com/random") no-repeat center / cover;
+  background: url("img/alfons-morales-YLSwjSy7stw-unsplash.jpg") no-repeat center / cover;
 }
 
 .header {
   display: flex;
   align-items: center;
-  padding: 10px;
+  justify-content: space-between;
+  padding: 10px 40px;
 }
 
 .main-heading {
@@ -26,7 +29,7 @@ body {
 
 .btn {
   padding: 10px;
-  background: none;
+  background: #fff;
   border: 1px solid rgb(194, 194, 194);
   border-radius: 5px;
 }
@@ -36,7 +39,6 @@ body {
   display: flex;
   justify-content: center;
   border-top: 1px solid rgb(196, 196, 196);
-  /* width: fit-content; */
 }
 
 .column {
@@ -58,9 +60,9 @@ body {
   width: 300px;
   position: absolute;
   padding: 10px 20px;
-  left: -400px;
+  right: -400px;
   opacity: 0;
-  top: 10px;
+  top: 50px;
   transition: .5s;
   background: #fff;
   border-radius: 5px;
@@ -69,7 +71,7 @@ body {
 }
 
 .book-form.shown {
-  left: 20px;
+  right: 20px;
   opacity: 1;
 }
 
@@ -100,8 +102,10 @@ body {
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 10px;
+  text-transform: capitalize;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #fff;
+  transition: 200ms;
 }
 
 .book__card > * {
@@ -118,7 +122,6 @@ body {
 
 .book__title {
   font-weight: 600;
-  text-transform: capitalize;
   font-size: 16px;
 }
 

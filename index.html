@@ -13,6 +13,13 @@
     <div class="header">
       <h1 class="main-heading">Books</h1>
       <button class="btn btn--show">&plus; Add Book</button>
+      <form name="view-form" class="view-form">
+        <label for="view">Change View</label>
+        <select name="view" id="view">
+          <option value="Status">Status</option>
+          <option value="Category">Category</option>
+        </select>
+      </form>
     </div>
     <div class="container">
       <form name="book-form" class="book-form">
@@ -32,11 +39,19 @@
         <button type="button" class="btn btn--add">Add Book</button>
         <button type="button" class="btn" onclick="fillInputs()">Fill Inputs</button>
       </form>
-      <div class="column column__read">
-        <h2 class="column__heading">Read</h2>
+      <div class="column column__backlog">
+        <h2 class="column__heading">Backlog</h2>
+        <select name="sort" id="sort">
+          <option value="author">Author</option>
+          <option value="Category">Category</option>
+          <option value="Year">Year</option>
+        </select>
       </div>
       <div class="column column__not-read">
         <h2 class="column__heading">To Read</h2>
+      </div>
+      <div class="column column__read">
+        <h2 class="column__heading">Read</h2>
       </div>
     </div>
   </main>

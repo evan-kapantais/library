@@ -1,5 +1,4 @@
 let _library = [];
-let bookIndex = 0;
 
 const titleInput = document.querySelector("#title");
 const authorInput = document.querySelector("#author");
@@ -59,7 +58,6 @@ function renderLibrary() {
   if (!localStorage.getItem("library")) {
     return;
   } else {
-    console.log("Library Found");
     const library = JSON.parse(localStorage.getItem("library"));
     library.forEach(book => {
       renderBookCard(book);
@@ -71,6 +69,7 @@ function renderBookCard(book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book__card");
   bookCard.setAttribute("data-key", book.title);
+  bookCard.setAttribute("draggable", true);
 
   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
                         <p class="book__title">${book.title}</p>
@@ -88,6 +87,12 @@ function renderBookCard(book) {
     notReadColumn.appendChild(bookCard);
   }
 
+  bookCard.addEventListener("dragstart", function() {
+    
+  });
+
+  // bookCard.ondragstart = () => console.log("drag");
+
   const btnDelete = bookCard.querySelector(".btn__delete");
   btnDelete.addEventListener("click", deleteItem);
 }
@@ -98,9 +103,8 @@ function deleteItem(e) {
 
   column.removeChild(card);
   const library = JSON.parse(localStorage.getItem("library"));
-  console.log(library);
 
-  const filteredLibrary = library.filter(book => book.title != card.getAttribute("data-key"));
+  const filteredLibrary = library.filter(book => book.title != card.getAttribute("data-key").toLowerCase());
   localStorage.setItem("library", JSON.stringify(filteredLibrary));
 }
 
@@ -111,5 +115,3 @@ function fillInputs() {
   categoryInput.value = "Non-Fiction";
   readInput.checked = true;
 }
-
-// window.onbeforeunload = () => localStorage.removeItem("library");
