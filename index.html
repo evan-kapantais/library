@@ -22,9 +22,9 @@
       </form>
     </div>
     <div class="container">
-      <form name="book-form" class="book-form">
+      <form name="book-form" class= "column book-form">
         <h2 class="column__heading">Add Book</h2>
-        <button type="button" class="btn btn--close">X</button>
+        <button type="button" class="btn btn__close">X</button>
         <label for="title">Title</label>
         <input type="text" id="title" required>
         <label for="author">Author</label>
@@ -35,17 +35,17 @@
         <input type="text" id="category">
         <label for="status">Read</label>
         <input type="checkbox" id="read">
-        <label for="tags"></label>
+        <label for="add-to">Add To:</label>
+        <select name="add-to" id="add-to">
+          <option value="backlog">Backlog</option>
+          <option value="unread">Unread</option>
+          <option value="read">Read</option>
+        </select>
         <button type="button" class="btn btn--add">Add Book</button>
         <button type="button" class="btn" onclick="fillInputs()">Fill Inputs</button>
       </form>
       <div class="column column__backlog">
         <h2 class="column__heading">Backlog</h2>
-        <select name="sort" id="sort">
-          <option value="author">Author</option>
-          <option value="Category">Category</option>
-          <option value="Year">Year</option>
-        </select>
       </div>
       <div class="column column__not-read">
         <h2 class="column__heading">To Read</h2>

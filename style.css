@@ -5,13 +5,12 @@
 }
 
 body {
-  /* background: rgb(255, 251, 231); */
   background: #F2EBD9;
-  overflow: hidden;
+  color: #222;
 }
 
 .banner {
-  height: 250px;
+  height: 25vh;
   background: url("img/alfons-morales-YLSwjSy7stw-unsplash.jpg") no-repeat center / cover;
 }
 
@@ -43,26 +42,26 @@ body {
 
 .column {
   width: 300px;
-  min-height: 500px;
+  min-height: 300px;
   padding: 10px;
   margin: 0 5px;
 }
 
 .column__heading {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(196, 196, 196);
+  padding: 10px 0;
 }
 
-/* Form */
+/* Side Form */
 
 .book-form {
   display: flex;
   flex-direction: column;
-  width: 300px;
   position: absolute;
   padding: 10px 20px;
-  right: -400px;
+  left: -400px;
   opacity: 0;
-  top: 50px;
   transition: .5s;
   background: #fff;
   border-radius: 5px;
@@ -71,11 +70,11 @@ body {
 }
 
 .book-form.shown {
-  right: 20px;
+  left: 20px;
   opacity: 1;
 }
 
-.btn--close {
+.btn__close {
   position: absolute;
   top: 20px;
   font-size: 12px;
@@ -87,7 +86,8 @@ body {
   margin-bottom: 5px;
 }
 
-.book-form > input {
+.book-form > input,
+.book-form > select {
   margin-bottom: 10px;
   padding: 5px;
   border: 1px solid rgb(196, 196, 196);
@@ -132,7 +132,7 @@ body {
 }
 
 .book__category {
-  background: lightsalmon;
+  background: rgb(255, 225, 150);
   width: fit-content;
   border-radius: 3px;
   padding: 5px;

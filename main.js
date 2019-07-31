@@ -8,7 +8,7 @@ const readInput = document.querySelector("#read");
 const form = document.querySelector(".book-form");
 const btnAddBook = document.querySelector(".btn--add");
 const btnShowForm = document.querySelector(".btn--show");
-const btnCloseForm = document.querySelector(".btn--close");
+const btnCloseForm = document.querySelector(".btn__close");
 
 window.addEventListener("load", renderLibrary);
 btnShowForm.addEventListener("click", showForm);
@@ -24,7 +24,7 @@ function closeForm() {
 }
 
 class Book {
-  constructor(title, author, year, category, read, index) {
+  constructor(title, author, year, category, read) {
     this.title = title,
     this.author = author,
     this.year = year,
@@ -87,12 +87,6 @@ function renderBookCard(book) {
     notReadColumn.appendChild(bookCard);
   }
 
-  bookCard.addEventListener("dragstart", function() {
-    
-  });
-
-  // bookCard.ondragstart = () => console.log("drag");
-
   const btnDelete = bookCard.querySelector(".btn__delete");
   btnDelete.addEventListener("click", deleteItem);
 }
@@ -104,9 +98,14 @@ function deleteItem(e) {
   column.removeChild(card);
   const library = JSON.parse(localStorage.getItem("library"));
 
-  const filteredLibrary = library.filter(book => book.title != card.getAttribute("data-key").toLowerCase());
+  const filteredLibrary = library.filter(book => book.title.toLowerCase() != card.getAttribute("data-key").toLowerCase());
   localStorage.setItem("library", JSON.stringify(filteredLibrary));
 }
+
+//TODO: Handle drag
+
+
+//Fill inputs with placeholder book
 
 function fillInputs() {
   titleInput.value = "God Is Not Great";
