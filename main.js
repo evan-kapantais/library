@@ -15,16 +15,21 @@ btnShowForm.addEventListener("click", showForm);
 btnCloseForm.addEventListener("click", closeForm);
 btnAddBook.addEventListener("click", getBookInfo);
 
-function closeFormOnOutsideClick(e) {
-  if (!e.target.classList.contains("book-form") || !e.target.parentNode.classList.contains("book-form")) {
-    closeForm();
-  }
-}
+// function closeFormOnOutsideClick(e) {
+
+//   if (e.target.classList.contains("btn")) {
+//     return;
+//   }
+
+//   if (!e.target.classList.contains("book-form") || !e.target.parentNode.classList.contains("book-form")) {
+//     closeForm();
+//   }
+// }
 
 function showForm() {
   setTimeout(() => {
     form.classList.add("shown");
-    window.addEventListener("click", closeFormOnOutsideClick);
+    // window.addEventListener("click", closeFormOnOutsideClick);
   }, 200);
 
   form.style.width = "300px";
@@ -34,7 +39,7 @@ function showForm() {
 function closeForm() {
   setTimeout(() => {
     form.style.width = 0;
-    window.removeEventListener("click", closeFormOnOutsideClick);
+    // window.removeEventListener("click", closeFormOnOutsideClick);
   }, 200);
 
   form.classList.remove("shown");
@@ -58,8 +63,6 @@ function getBookInfo() {
   addBookToLibrary(book);
   renderBookCard(book);
   form.reset();
-
-  console.log(columnInput.value);
 }
 
 function addBookToLibrary(book) {
