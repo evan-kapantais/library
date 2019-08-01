@@ -4,7 +4,7 @@ const titleInput = document.querySelector("#title");
 const authorInput = document.querySelector("#author");
 const yearInput = document.querySelector("#year");
 const categoryInput = document.querySelector("#category");
-const readInput = document.querySelector("#read");
+const columnInput = document.querySelector("#column");
 const form = document.querySelector(".book-form");
 const btnAddBook = document.querySelector(".btn--add");
 const btnShowForm = document.querySelector(".btn--show");
@@ -24,22 +24,24 @@ function closeForm() {
 }
 
 class Book {
-  constructor(title, author, year, category, read) {
+  constructor(title, author, year, category, column) {
     this.title = title,
     this.author = author,
     this.year = year,
     this.category = category,
-    this.read = read
+    this.column = column
   }
 }
 
 function getBookInfo() {
   const book = new Book(titleInput.value, authorInput.value, 
-  yearInput.value, categoryInput.value, readInput.checked);
+  yearInput.value, categoryInput.value, columnInput.value);
 
   addBookToLibrary(book);
   renderBookCard(book);
   form.reset();
+
+  console.log(columnInput.value);
 }
 
 function addBookToLibrary(book) {
@@ -79,12 +81,15 @@ function renderBookCard(book) {
                           <p class="book__category">${book.category}</p>
                         </div>`;
 
-  if (book.read == true) {
+  if (book.column == "backlog") {
+    const backlogColumn = document.querySelector(".column__backlog");
+    backlogColumn.appendChild(bookCard);
+  } else if (book.column == "unread") {
+    const unreadColumn = document.querySelector(".column__unread");
+    unreadColumn.appendChild(bookCard);
+  } else {
     const readColumn = document.querySelector(".column__read");
     readColumn.appendChild(bookCard);
-  } else {
-    const notReadColumn = document.querySelector(".column__not-read");
-    notReadColumn.appendChild(bookCard);
   }
 
   const btnDelete = bookCard.querySelector(".btn__delete");
@@ -112,5 +117,5 @@ function fillInputs() {
   authorInput.value = "Christopher Hitchens";
   yearInput.value = "2005";
   categoryInput.value = "Non-Fiction";
-  readInput.checked = true;
+  columnInput.value = "backlog";
 }
