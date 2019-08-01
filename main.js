@@ -16,11 +16,18 @@ btnCloseForm.addEventListener("click", closeForm);
 btnAddBook.addEventListener("click", getBookInfo);
 
 function showForm() {
-  form.classList.add("shown");
+  form.style.width = "300px";
+  setTimeout(() => {
+    form.classList.add("shown");
+  }, 200);
 }
 
 function closeForm() {
+  setTimeout(() => {
+    form.style.width = 0;
+  }, 200);
   form.classList.remove("shown");
+
 }
 
 class Book {
