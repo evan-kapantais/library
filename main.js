@@ -9,6 +9,7 @@ const form = document.querySelector(".book-form");
 const btnAddBook = document.querySelector(".btn__add");
 const btnShowForm = document.querySelector(".btn__show");
 const btnCloseForm = document.querySelector(".btn__close");
+const mainHeading = document.querySelector(".main-heading");
 
 window.addEventListener("load", renderLibrary);
 btnShowForm.addEventListener("click", showForm);
@@ -74,6 +75,13 @@ function renderLibrary() {
     library.forEach(book => {
       renderBookCard(book);
     });
+  }
+
+  if (!localStorage.getItem("main-heading")) {
+    return;
+  } else {
+    const mainHeading = document.querySelector(".main-heading");
+    mainHeading.innerText = localStorage.getItem("main-heading");
   }
 }
 
@@ -157,4 +165,14 @@ function fillInputs() {
   yearInput.value = "2005";
   categoryInput.value = "Non-Fiction";
   columnInput.value = "backlog";
+}
+
+mainHeading.addEventListener("keypress", handleMainHeading);
+
+function handleMainHeading(e) {
+  if (e.which == 13) {
+    mainHeading.innerText = e.target.innerText;
+    localStorage.setItem("main-heading", mainHeading.innerText);
+    e.target.blur();
+  }
 }
