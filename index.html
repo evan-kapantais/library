@@ -12,10 +12,9 @@
   <main>
     <div class="header">
       <h1 class="main-heading">Books</h1>
-      <button class="btn btn--show">&plus; Add Book</button>
+      <button class="btn btn__show">&plus; Add Book</button>
     </div>
     <div class="container">
-      <form action="getBookInfo"></form>
       <form name="book-form" class= "column book-form">
         <h2 class="column__heading">Add Book</h2>
         <button type="button" class="btn btn__close">X</button>
@@ -33,16 +32,16 @@
           <option value="unread">Unread</option>
           <option value="read">Read</option>
         </select>
-        <button type="submit" class="btn btn--add" style="margin-bottom: 10px;">Add Book</button>
+        <button type="submit" class="btn btn__add" style="margin-bottom: 10px;">Add Book</button>
         <button type="button" class="btn" onclick="fillInputs()">Fill Inputs</button>
       </form>
-      <div class="column column__backlog">
+      <div class="column" id="backlog">
         <h2 class="column__heading">Backlog</h2>
       </div>
-      <div class="column column__unread">
-        <h2 class="column__heading">To Read</h2>
+      <div class="column" id="unread">
+        <h2 class="column__heading">Unread</h2>
       </div>
-      <div class="column column__read">
+      <div class="column" id="read">
         <h2 class="column__heading">Read</h2>
       </div>
     </div>

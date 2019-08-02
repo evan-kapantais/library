@@ -1,3 +1,7 @@
+:root {
+  --main-grey: rgb(68, 68, 68);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +10,7 @@
 }
 
 body {
-  background: #F2EBD9;
+  background: rgb(255, 252, 245);
   color: #222;
 }
 
@@ -28,11 +32,36 @@ body {
 }
 
 .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
   padding: 10px;
   background: #fff;
-  border: 1px solid rgb(194, 194, 194);
-  border-radius: 5px;
+  border: 1px solid var(--main-grey);
   font-size: 14px;
+  box-shadow: 2px 2px 0 0 var(--main-grey);
+  transition: 200ms;
+  font-weight: 600;
+}
+
+.btn:hover {
+  box-shadow: 4px 4px var(--main-grey);
+}
+
+.btn:active {
+  outline: none;
+  box-shadow: none;
+  transform: translate(4px, 4px);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn__show {
+  background: lightgreen;
+  border-radius: 0;
 }
 
 .container {
@@ -44,9 +73,8 @@ body {
 
 .column {
   width: 300px;
-  min-height: 300px;
   padding: 10px;
-  margin: 0 5px;
+  margin: 0 10px;
 }
 
 .column__heading {
@@ -54,6 +82,7 @@ body {
   border-bottom: 1px solid rgb(196, 196, 196);
   padding: 10px 0;
 }
+
 
 /* Side Form */
 
@@ -65,8 +94,8 @@ body {
   margin-top: 20px;
   opacity: 0;
   background: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px 0 rgb(179, 179, 179);
+  box-shadow: 5px 5px var(--main-grey);
+  border: 1px solid var(--main-grey);
   z-index: 2;
   width: 0;
 }
@@ -78,9 +107,11 @@ body {
 .btn__close {
   position: absolute;
   top: 20px;
-  font-size: 12px;
+  font-size: 10px;
   right: 20px;
-  padding: 5px 10px;
+  width: 25px;
+  height: 25px;
+  padding: 0;
 }
 
 .book-form > label {
@@ -100,9 +131,9 @@ body {
 
 .book__card {
   position: relative;
-  box-shadow: 0 0 5px 0 rgb(179, 179, 179);
+  box-shadow: 5px 5px var(--main-grey);
   padding: 15px;
-  border-radius: 5px;
+  border: 1px solid var(--main-grey);
   margin-bottom: 10px;
   text-transform: capitalize;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -117,9 +148,13 @@ body {
 .btn__delete {
   position: absolute;
   top: 15px;
-  font-size: 12px;
+  font-size: 10px;
   right: 20px;
-  padding: 5px 10px;
+  width: 25px;
+  height: 25px;
+  line-height: 1;
+  background-color: rgb(255, 91, 91);
+  color: #fff;
 }
 
 .book__title {
@@ -144,4 +179,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.move__form > select {
+  padding: 2px;
+  width: 100%;
+  opacity: .5;
+}
+
+.move__form > select:hover {
+  opacity: 1;
 }

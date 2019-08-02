@@ -6,8 +6,8 @@ const yearInput = document.querySelector("#year");
 const categoryInput = document.querySelector("#category");
 const columnInput = document.querySelector("#column");
 const form = document.querySelector(".book-form");
-const btnAddBook = document.querySelector(".btn--add");
-const btnShowForm = document.querySelector(".btn--show");
+const btnAddBook = document.querySelector(".btn__add");
+const btnShowForm = document.querySelector(".btn__show");
 const btnCloseForm = document.querySelector(".btn__close");
 
 window.addEventListener("load", renderLibrary);
@@ -15,21 +15,9 @@ btnShowForm.addEventListener("click", showForm);
 btnCloseForm.addEventListener("click", closeForm);
 btnAddBook.addEventListener("click", getBookInfo);
 
-// function closeFormOnOutsideClick(e) {
-
-//   if (e.target.classList.contains("btn")) {
-//     return;
-//   }
-
-//   if (!e.target.classList.contains("book-form") || !e.target.parentNode.classList.contains("book-form")) {
-//     closeForm();
-//   }
-// }
-
 function showForm() {
   setTimeout(() => {
     form.classList.add("shown");
-    // window.addEventListener("click", closeFormOnOutsideClick);
   }, 200);
 
   form.style.width = "300px";
@@ -39,7 +27,6 @@ function showForm() {
 function closeForm() {
   setTimeout(() => {
     form.style.width = 0;
-    // window.removeEventListener("click", closeFormOnOutsideClick);
   }, 200);
 
   form.classList.remove("shown");
@@ -75,6 +62,8 @@ function addBookToLibrary(book) {
   } else {
     localStorage.setItem("library", JSON.stringify(_library));
   }
+
+  console.log(JSON.parse(localStorage.getItem("library")));
 }
 
 function renderLibrary() {
@@ -92,7 +81,6 @@ function renderBookCard(book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book__card");
   bookCard.setAttribute("data-key", book.title);
-  bookCard.setAttribute("draggable", true);
 
   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
                         <p class="book__title">${book.title}</p>
@@ -100,21 +88,51 @@ function renderBookCard(book) {
                         <div class="book__footer">
                           <p class="book__year">${book.year}</p>
                           <p class="book__category">${book.category}</p>
-                        </div>`;
+                        </div>
+                        <form name="move__form" class="move__form">
+                          <select id="move">
+                            <option value="">Move To...</option>
+                            <option value="backlog">Backlog</option>
+                            <option value="unread">Unread</option>
+                            <option value="read">Read</option>
+                          </select>
+                        </form>`;
 
   if (book.column == "backlog") {
-    const backlogColumn = document.querySelector(".column__backlog");
-    backlogColumn.appendChild(bookCard);
-  } else if (book.column == "unread") {
-    const unreadColumn = document.querySelector(".column__unread");
-    unreadColumn.appendChild(bookCard);
-  } else {
-    const readColumn = document.querySelector(".column__read");
-    readColumn.appendChild(bookCard);
-  }
+      const backlogColumn = document.querySelector("#backlog");
+      backlogColumn.appendChild(bookCard);
+    } else if (book.column == "unread") {
+      const unreadColumn = document.querySelector("#unread");
+      unreadColumn.appendChild(bookCard);
+    } else {
+      const readColumn = document.querySelector("#read");
+      readColumn.appendChild(bookCard);
+    }
+
+  const moveForm = bookCard.querySelector("#move");
+  const currentColumnId = bookCard.parentNode.id;
+  moveForm.value = currentColumnId;
+  moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
 
   const btnDelete = bookCard.querySelector(".btn__delete");
   btnDelete.addEventListener("click", deleteItem);
+}
+
+function changeBookCategory(bookCard, moveForm) {
+  const moveFormValue = moveForm.value;
+  const currentColumnId = bookCard.parentNode.id;
+  const targetColumn = document.querySelector(`#${moveFormValue}`);
+
+  if (moveFormValue != currentColumnId) {
+    targetColumn.appendChild(bookCard);
+    const library = JSON.parse(localStorage.getItem("library"));
+    library.forEach(book => {
+      if (book.title.toLowerCase() == bookCard.getAttribute("data-key").toLowerCase()) {
+        book.column = moveFormValue;
+        localStorage.setItem("library", JSON.stringify(library));
+      }
+    });
+  }
 }
 
 function deleteItem(e) {
