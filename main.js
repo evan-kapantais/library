@@ -68,9 +68,7 @@ function addBookToLibrary(book) {
 }
 
 function renderLibrary() {
-  if (!localStorage.getItem("library")) {
-    return;
-  } else {
+  } if (localStorage.getItem("library") != null) {
     const library = JSON.parse(localStorage.getItem("library"));
     library.forEach(book => {
       renderBookCard(book);
@@ -82,9 +80,6 @@ function renderLibrary() {
   
   if (storedHeading != null) {
     mainHeadingElement.innerText = storedHeading;
-  } else {
-    return;
-  }
 }
 
 function renderBookCard(book) {
