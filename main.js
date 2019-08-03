@@ -77,11 +77,13 @@ function renderLibrary() {
     });
   }
 
-  if (!localStorage.getItem("main-heading")) {
-    return;
+  let storedHeading = localStorage.getItem("main-heading");
+  const mainHeadingElement = document.querySelector(".main-heading");
+  
+  if (storedHeading != null) {
+    mainHeadingElement.innerText = storedHeading;
   } else {
-    const mainHeading = document.querySelector(".main-heading");
-    mainHeading.innerText = localStorage.getItem("main-heading");
+    return;
   }
 }
 
