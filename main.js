@@ -187,12 +187,18 @@ function populateLibrary() {
 }
 
 mainHeading.addEventListener("keypress", handleMainHeading);
+mainHeading.addEventListener("blur", handleMainHeading);
 
 function handleMainHeading(e) {
-  if (e.which == 13) {
+  if (e.type == "blur") {
     mainHeading.innerText = e.target.innerText;
     localStorage.setItem("main-heading", mainHeading.innerText);
-    e.target.blur();
+  } else if (e.type == "keypress") {
+    if (e.which == 13) {
+      mainHeading.innerText = e.target.innerText;
+      localStorage.setItem("main-heading", mainHeading.innerText);
+      e.target.blur();
+    }
   }
 }
 
