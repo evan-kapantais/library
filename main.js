@@ -44,7 +44,8 @@ class Book {
   }
 }
 
-function getBookInfo() {
+function getBookInfo(e) {
+  e.preventDefault();
   const book = new Book(titleInput.value, authorInput.value, 
   yearInput.value, categoryInput.value, columnInput.value);
 
@@ -54,32 +55,34 @@ function getBookInfo() {
 }
 
 function addBookToLibrary(book) {
-  _library.push(book);
+  let library = [];
 
-  if (localStorage.getItem("library")) {
-    const library = JSON.parse(localStorage.getItem("library"));
+  if (localStorage.getItem("library") != null) {
+    library = JSON.parse(localStorage.getItem("library"));
     library.push(book);
     localStorage.setItem("library", JSON.stringify(library));
   } else {
-    localStorage.setItem("library", JSON.stringify(_library));
+    library.push(book);
+    localStorage.setItem("library", JSON.stringify(library));
   }
-
-  console.log(JSON.parse(localStorage.getItem("library")));
 }
 
 function renderLibrary() {
-  } if (localStorage.getItem("library") != null) {
-    const library = JSON.parse(localStorage.getItem("library"));
+
+  const storedHeading = localStorage.getItem("main-heading");
+  const mainHeadingElement = document.querySelector(".main-heading");
+  const storedLibrary = localStorage.getItem("library");
+
+  if (storedLibrary != null) {
+    const library = JSON.parse(storedLibrary);
     library.forEach(book => {
       renderBookCard(book);
     });
   }
 
-  let storedHeading = localStorage.getItem("main-heading");
-  const mainHeadingElement = document.querySelector(".main-heading");
-  
   if (storedHeading != null) {
     mainHeadingElement.innerText = storedHeading;
+  }
 }
 
 function renderBookCard(book) {
@@ -164,6 +167,25 @@ function fillInputs() {
   columnInput.value = "backlog";
 }
 
+//Statically populate library
+
+function populateLibrary() {
+  const book1 = new Book("The Righteous Mind", "Jonathan Heidt", "2012", "Psychology", "backlog");
+  const book2 = new Book("Saddam Hussein: The Politics Of Revenge", "Said K. Aburish", "2001", "Politics", "unread");
+  const book3 = new Book("Talking To My Daughter", "Yanis Varoufakis", "2017", "Finance", "read");
+
+  let localLibrary = localStorage.getItem("library");
+
+  if (localLibrary != null) {return false;}
+
+  _library.push(book1, book2, book3);
+  localStorage.setItem("library", _library);
+
+  _library.forEach(book => {
+    renderBookCard(book);
+  });
+}
+
 mainHeading.addEventListener("keypress", handleMainHeading);
 
 function handleMainHeading(e) {
@@ -173,3 +195,7 @@ function handleMainHeading(e) {
     e.target.blur();
   }
 }
+
+//Intro controller
+
+const btnSlide = document.querySelector(".slide__btn");
