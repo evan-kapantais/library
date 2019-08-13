@@ -12,27 +12,54 @@ const btnCloseForm = document.querySelector(".btn__close");
 const mainHeading = document.querySelector(".main-heading");
 
 window.addEventListener("load", renderLibrary);
-btnShowForm.addEventListener("click", showForm);
-btnCloseForm.addEventListener("click", closeForm);
-btnAddBook.addEventListener("click", getBookInfo);
+btnAddBook.addEventListener("click", getFormInfo);
 
-function showForm() {
-  setTimeout(() => {
-    form.classList.add("shown");
-  }, 200);
-
-  form.style.width = "300px";
-  btnShowForm.setAttribute("disabled", true);
+const bookForm = {
+  showForm: () => {
+    setTimeout(() => {
+      form.classList.add("shown");
+    }, 200);
+    form.style.width = "300px";
+    btnShowForm.setAttribute("disabled", true);
+  },
+  closeForm: () => {
+    setTimeout(() => {
+      form.style.width = 0;
+    }, 200);
+    form.classList.remove("shown");
+    btnShowForm.removeAttribute("disabled");
+  }
 }
 
-function closeForm() {
-  setTimeout(() => {
-    form.style.width = 0;
-  }, 200);
+btnShowForm.addEventListener("click", bookForm.showForm);
+btnCloseForm.addEventListener("click", bookForm.closeForm);
 
-  form.classList.remove("shown");
-  btnShowForm.removeAttribute("disabled");
-}
+const Library = (function(){
+  
+  const getLibrary = () => {
+    return JSON.parse(localStorage.getItem("library"));
+  }
+
+  const setLibrary = (library) => {
+    localStorage.setItem("library", JSON.stringify(library));
+  }
+  
+  const addToLibrary = (book) => {
+    setLibrary(getStoredLibrary.push(book));
+  }
+
+  const removeFromLibrary = (book) => {
+    setLibrary(getLibrary.filter(b => b.title != book.title));
+  }
+
+  const renderLibrary = () => {
+    getLibrary.forEach(book => {
+      renderBookCard(book);
+    });
+  }
+
+  return {getLibrary, addToLibrary, removeFromLibrary, renderLibrary};
+})();
 
 class Book {
   constructor(title, author, year, category, column) {
@@ -44,7 +71,7 @@ class Book {
   }
 }
 
-function getBookInfo(e) {
+function getFormInfo(e) {
   e.preventDefault();
   const book = new Book(titleInput.value, authorInput.value, 
   yearInput.value, categoryInput.value, columnInput.value);
@@ -89,6 +116,7 @@ function renderBookCard(book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book__card");
   bookCard.setAttribute("data-key", book.title);
+  bookCard.setAttribute("draggable", true);
 
   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
                         <p class="book__title">${book.title}</p>
@@ -124,6 +152,18 @@ function renderBookCard(book) {
 
   const btnDelete = bookCard.querySelector(".btn__delete");
   btnDelete.addEventListener("click", deleteItem);
+
+  bookCard.addEventListener("dragstart", handleDragStart);
+  bookCard.addEventListener("dragend", handleDragEnd);
+
+  const columns = document.querySelectorAll(".column");
+
+  columns.forEach(column => {
+    column.addEventListener("dragover", handleDragOver);
+    column.addEventListener("dragenter", handleDragEnter);
+    column.addEventListener("dragleave", handleDragLeave);
+    column.addEventListener("drop", handleDragDrop);
+  });
 }
 
 function changeBookCategory(bookCard, moveForm) {
@@ -154,9 +194,6 @@ function deleteItem(e) {
   localStorage.setItem("library", JSON.stringify(filteredLibrary));
 }
 
-//TODO: Handle drag
-
-
 //Fill inputs with placeholder book
 
 function fillInputs() {
@@ -165,25 +202,6 @@ function fillInputs() {
   yearInput.value = "2005";
   categoryInput.value = "Non-Fiction";
   columnInput.value = "backlog";
-}
-
-//Statically populate library
-
-function populateLibrary() {
-  const book1 = new Book("The Righteous Mind", "Jonathan Heidt", "2012", "Psychology", "backlog");
-  const book2 = new Book("Saddam Hussein: The Politics Of Revenge", "Said K. Aburish", "2001", "Politics", "unread");
-  const book3 = new Book("Talking To My Daughter", "Yanis Varoufakis", "2017", "Finance", "read");
-
-  let localLibrary = localStorage.getItem("library");
-
-  if (localLibrary != null) {return false;}
-
-  _library.push(book1, book2, book3);
-  localStorage.setItem("library", _library);
-
-  _library.forEach(book => {
-    renderBookCard(book);
-  });
 }
 
 mainHeading.addEventListener("keypress", handleMainHeading);
@@ -202,6 +220,34 @@ function handleMainHeading(e) {
   }
 }
 
-//Intro controller
+// Handle drag
 
-const btnSlide = document.querySelector(".slide__btn");
+let draggedCard = null;
+
+function handleDragStart() {
+  setTimeout(() => {
+    this.style.display = "none";
+  }, 20);
+  draggedCard = this;
+  console.log(draggedCard);
+}
+
+function handleDragEnd() {
+  this.style.display = "block";
+}
+
+function handleDragOver(e) {
+  e.preventDefault(e);
+}
+
+function handleDragEnter(e) {
+  this.style.background = "#999";
+}
+
+function handleDragLeave() {
+
+}
+
+function handleDragDrop() {
+  this.append(draggedCard);
+}
