@@ -11,7 +11,7 @@ const btnShowForm = document.querySelector(".btn__show");
 const btnCloseForm = document.querySelector(".btn__close");
 const mainHeading = document.querySelector(".main-heading");
 
-window.addEventListener("load", renderLibrary);
+window.addEventListener("load", render);
 btnAddBook.addEventListener("click", getFormInfo);
 
 const bookForm = {
@@ -36,29 +36,43 @@ btnCloseForm.addEventListener("click", bookForm.closeForm);
 
 const Library = (function(){
   
-  const getLibrary = () => {
+  const get = () => {
     return JSON.parse(localStorage.getItem("library"));
   }
 
-  const setLibrary = (library) => {
+  const set = (library) => {
     localStorage.setItem("library", JSON.stringify(library));
   }
   
-  const addToLibrary = (book) => {
-    setLibrary(getStoredLibrary.push(book));
+  const addBook = (book) => {
+    let library = get();
+
+    if (library == null) {
+      library = [];
+      library.push(book);
+      set(library);
+    } else {
+      library.push(book);
+      set(library);
+    }
   }
 
-  const removeFromLibrary = (book) => {
-    setLibrary(getLibrary.filter(b => b.title != book.title));
+  const removeBook = (book) => {
+    set(get().filter(b => b.title != book.title));
   }
 
-  const renderLibrary = () => {
-    getLibrary.forEach(book => {
+  const render = () => {
+    get().forEach(book => {
       renderBookCard(book);
     });
   }
 
-  return {getLibrary, addToLibrary, removeFromLibrary, renderLibrary};
+  return {get, set, addBook, removeBook, render};
+})();
+
+const Display = (function(){
+
+  
 })();
 
 class Book {
@@ -71,12 +85,26 @@ class Book {
   }
 }
 
+// const book = new Book("title", "author", "2012", "psy", "read");
+// console.log(book);
+// Library.addBook(book);
+
+// const book1 = new Book("titlewdee", "cweauthor", "2012", "pvrsy", "rrvrvead");
+// Library.addBook(book1);
+
+function toTitleCase(str) {
+  return str.toLowerCase().split(' ')
+  .map(w => w.charAt(0).toUpperCase() + w.substr(1)).join(' ');
+}
+
 function getFormInfo(e) {
   e.preventDefault();
-  const book = new Book(titleInput.value, authorInput.value, 
+
+  const book = new Book(toTitleCase(titleInput.value), toTitleCase(authorInput.value), 
   yearInput.value, categoryInput.value, columnInput.value);
 
   addBookToLibrary(book);
+  // Library.addBook(book);
   renderBookCard(book);
   form.reset();
 }
@@ -94,7 +122,7 @@ function addBookToLibrary(book) {
   }
 }
 
-function renderLibrary() {
+function render() {
 
   const storedHeading = localStorage.getItem("main-heading");
   const mainHeadingElement = document.querySelector(".main-heading");
@@ -227,7 +255,7 @@ let draggedCard = null;
 function handleDragStart() {
   setTimeout(() => {
     this.style.display = "none";
-  }, 20);
+  }, 0);
   draggedCard = this;
   console.log(draggedCard);
 }
@@ -241,13 +269,14 @@ function handleDragOver(e) {
 }
 
 function handleDragEnter(e) {
-  this.style.background = "#999";
+  this.classList.add("hovered");
 }
 
 function handleDragLeave() {
-
+  this.classList.remove("hovered");
 }
 
 function handleDragDrop() {
+  this.classList.remove("hovered");
   this.append(draggedCard);
 }

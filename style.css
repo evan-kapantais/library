@@ -1,5 +1,6 @@
 :root {
   --main-grey: rgb(68, 68, 68);
+  --main-background: rgb(196, 196, 196);
 }
 
 * {
@@ -44,6 +45,7 @@ body {
   box-shadow: 2px 2px 0 0 var(--main-grey);
   transition: 200ms;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -73,7 +75,6 @@ body {
   font-size: 10px;
 }
 
-
 .banner-form {
   position: absolute;
   top: 20px;
@@ -85,13 +86,18 @@ body {
   position: relative;
   display: flex;
   justify-content: center;
-  border-top: 1px solid rgb(196, 196, 196);
+  border-top: 1px solid var(--main-background);
 }
 
 .column {
   width: 300px;
   padding: 10px;
   margin: 0 10px;
+}
+
+.column.hovered {
+  border-left: 1px solid rgb(233, 216, 139);
+  border-right: 1px solid rgb(233, 216, 139);
 }
 
 .column__heading {
@@ -111,7 +117,7 @@ body {
   margin-top: 20px;
   opacity: 0;
   background: #fff;
-  box-shadow: 5px 5px var(--main-grey);
+  box-shadow: 3px 3px var(--main-grey);
   border: 1px solid var(--main-grey);
   z-index: 2;
   width: 0;
@@ -149,10 +155,10 @@ body {
 
 .book__card {
   position: relative;
-  box-shadow: 5px 5px var(--main-grey);
+  box-shadow: 3px 3px var(--main-grey);
   padding: 15px;
   border: 1px solid var(--main-grey);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   text-transform: capitalize;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #fff;
@@ -219,7 +225,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  box-shadow: 5px 5px var(--main-grey);
+  box-shadow: 3px 3px var(--main-grey);
   border: 1px solid var(--main-grey);
 }
 
