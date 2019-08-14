@@ -1,37 +1,67 @@
 let _library = [];
 
-const titleInput = document.querySelector("#title");
-const authorInput = document.querySelector("#author");
-const yearInput = document.querySelector("#year");
-const categoryInput = document.querySelector("#category");
-const columnInput = document.querySelector("#column");
 const form = document.querySelector(".book-form");
-const btnAddBook = document.querySelector(".btn__add");
-const btnShowForm = document.querySelector(".btn__show");
-const btnCloseForm = document.querySelector(".btn__close");
 
-// window.addEventListener("load", render);
-btnAddBook.addEventListener("click", getFormInfo);
 
-const bookForm = {
-  showForm: () => {
+// window.addEventListener("load", Display.render);
+
+const BookForm = (function(){
+  
+  const titleInput = document.querySelector("#title");
+  const authorInput = document.querySelector("#author");
+  const yearInput = document.querySelector("#year");
+  const categoryInput = document.querySelector("#category");
+  const columnInput = document.querySelector("#column");
+  const btnShowForm = document.querySelector(".btn__show");
+  const btnCloseForm = document.querySelector(".btn__close");
+  const btnAddBook = document.querySelector(".btn__add");
+  const btnFillBook = document.querySelector(".btn__fill");
+  
+  const showForm = () => {
     setTimeout(() => {
       form.classList.add("shown");
     }, 200);
     form.style.width = "300px";
     btnShowForm.setAttribute("disabled", true);
-  },
-  closeForm: () => {
+  }
+
+  const closeForm = () => {
     setTimeout(() => {
       form.style.width = 0;
     }, 200);
     form.classList.remove("shown");
     btnShowForm.removeAttribute("disabled");
   }
-}
 
-btnShowForm.addEventListener("click", bookForm.showForm);
-btnCloseForm.addEventListener("click", bookForm.closeForm);
+  const toTitleCase = (str) => {
+    return str.toLowerCase().split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.substr(1)).join(' ');
+  }
+  
+  const getFormInfo = (e) => {
+    e.preventDefault();
+    const book = new Book(toTitleCase(titleInput.value), toTitleCase(authorInput.value), 
+    yearInput.value, categoryInput.value, columnInput.value);
+    
+    Library.addBook(book);
+    renderBookCard(book);
+    form.reset();
+  }
+
+  const fillInputs = () => {
+      titleInput.value = "God Is Not Great";
+      authorInput.value = "Christopher Hitchens";
+      yearInput.value = "2005";
+      categoryInput.value = "Non-Fiction";
+      columnInput.value = "backlog";
+    }
+  
+  btnShowForm.addEventListener("click", showForm);
+  btnCloseForm.addEventListener("click", closeForm);
+  btnAddBook.addEventListener("click", getFormInfo);
+  btnFillBook.addEventListener("click", fillInputs);
+
+})();
 
 const Library = (function(){
   
@@ -119,33 +149,8 @@ class Book {
   }
 }
 
-// const book = new Book("title", "author", "2012", "psy", "read");
-// console.log(book);
-// Library.addBook(book);
-
-// const book1 = new Book("titlewdee", "cweauthor", "2012", "pvrsy", "rrvrvead");
-// Library.addBook(book1);
-
-function toTitleCase(str) {
-  return str.toLowerCase().split(' ')
-  .map(w => w.charAt(0).toUpperCase() + w.substr(1)).join(' ');
-}
-
-function getFormInfo(e) {
-  e.preventDefault();
-
-  const book = new Book(toTitleCase(titleInput.value), toTitleCase(authorInput.value), 
-  yearInput.value, categoryInput.value, columnInput.value);
-
-  Library.addBook(book);
-  renderBookCard(book);
-  form.reset();
-}
-
 // function render() {
 
-//   const storedHeading = localStorage.getItem("main-heading");
-//   const mainHeadingElement = document.querySelector(".main-heading");
 //   const storedLibrary = localStorage.getItem("library");
 
 //   if (storedLibrary != null) {
@@ -153,10 +158,6 @@ function getFormInfo(e) {
 //     library.forEach(book => {
 //       renderBookCard(book);
 //     });
-//   }
-
-//   if (storedHeading != null) {
-//     mainHeadingElement.innerText = storedHeading;
 //   }
 // }
 
