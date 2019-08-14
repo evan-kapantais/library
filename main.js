@@ -1,12 +1,16 @@
-let _library = [];
-
-const form = document.querySelector(".book-form");
-
-
-// window.addEventListener("load", Display.render);
+class Book {
+  constructor(title, author, year, category, column) {
+    this.title = title,
+    this.author = author,
+    this.year = year,
+    this.category = category,
+    this.column = column
+  }
+}
 
 const BookForm = (function(){
   
+  const form = document.querySelector(".book-form");
   const titleInput = document.querySelector("#title");
   const authorInput = document.querySelector("#author");
   const yearInput = document.querySelector("#year");
@@ -86,17 +90,17 @@ const Library = (function(){
     }
   }
 
-  const removeBook = (book) => {
+  const deleteBook = (book) => {
     set(get().filter(b => b.title != book.title));
   }
 
-  const render = () => {
+  const render = (() => {
     get().forEach(book => {
       renderBookCard(book);
     });
-  }
+  })();
 
-  return {get, set, addBook, removeBook, render};
+  return {get, set, addBook, deleteBook, render};
 })();
 
 const Heading = (function(){
@@ -106,7 +110,7 @@ const Heading = (function(){
   mainHeading.addEventListener("blur", handleMainHeading);
 
   const get = () => {
-     return JSON.parse(localStorage.getItem("main-heading"));
+    return JSON.parse(localStorage.getItem("main-heading"));
   }
 
   const set = (heading) => {   
@@ -132,158 +136,138 @@ const Heading = (function(){
 
 })();
 
+const Display = (function(){
 
+})();
 
-// const Display = (function(){
+class Card {
+  constructor(book) {
+    // this.title = book.title;
+    // this.author = book.author;
+    // this.year = book.year;
+    // this.category = book.category;
+    // this.column = book.column;
 
-  
-// })();
-
-class Book {
-  constructor(title, author, year, category, column) {
-    this.title = title,
-    this.author = author,
-    this.year = year,
-    this.category = category,
-    this.column = column
+    const {title, author, year, category, column} = book;
   }
+
+  // render() {
+  //   const bookCard = document.createElement("div");
+  //   bookCard.classList.add("book__card");
+  //   bookCard.setAttribute("data-key", title);
+  //   bookCard.setAttribute("draggable", true);
+  // }
 }
 
-// function render() {
+function renderBookCard(book) {
+  const bookCard = document.createElement("div");
+  bookCard.classList.add("book__card");
+  bookCard.setAttribute("data-key", book.title);
+  bookCard.setAttribute("draggable", true);
 
-//   const storedLibrary = localStorage.getItem("library");
+  bookCard.innerHTML = `<button class="btn btn__delete">X</button>
+                        <p class="book__title">${book.title}</p>
+                        <p class="book__author">${book.author}</p>
+                        <div class="book__footer">
+                          <p class="book__year">${book.year}</p>
+                          <p class="book__category">${book.category}</p>
+                        </div>
+                        <form name="move__form" class="move__form">
+                          <select id="move">
+                            <option value="">Move To...</option>
+                            <option value="backlog">Backlog</option>
+                            <option value="unread">Unread</option>
+                            <option value="read">Read</option>
+                          </select>
+                        </form>`;
 
-//   if (storedLibrary != null) {
-//     const library = JSON.parse(storedLibrary);
-//     library.forEach(book => {
-//       renderBookCard(book);
-//     });
-//   }
-// }
+  const targetColumn = document.querySelector(`#${book.column}`);
+  targetColumn.appendChild(bookCard);
 
-// function renderBookCard(book) {
-//   const bookCard = document.createElement("div");
-//   bookCard.classList.add("book__card");
-//   bookCard.setAttribute("data-key", book.title);
-//   bookCard.setAttribute("draggable", true);
+  const moveForm = bookCard.querySelector("#move");
+  const currentColumnId = bookCard.parentNode.id;
+  moveForm.value = currentColumnId;
+  moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
 
-//   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
-//                         <p class="book__title">${book.title}</p>
-//                         <p class="book__author">${book.author}</p>
-//                         <div class="book__footer">
-//                           <p class="book__year">${book.year}</p>
-//                           <p class="book__category">${book.category}</p>
-//                         </div>
-//                         <form name="move__form" class="move__form">
-//                           <select id="move">
-//                             <option value="">Move To...</option>
-//                             <option value="backlog">Backlog</option>
-//                             <option value="unread">Unread</option>
-//                             <option value="read">Read</option>
-//                           </select>
-//                         </form>`;
+  const btnDelete = bookCard.querySelector(".btn__delete");
+  btnDelete.addEventListener("click", deleteItem);
 
-//   if (book.column == "backlog") {
-//       const backlogColumn = document.querySelector("#backlog");
-//       backlogColumn.appendChild(bookCard);
-//     } else if (book.column == "unread") {
-//       const unreadColumn = document.querySelector("#unread");
-//       unreadColumn.appendChild(bookCard);
-//     } else {
-//       const readColumn = document.querySelector("#read");
-//       readColumn.appendChild(bookCard);
-//     }
+  bookCard.addEventListener("dragstart", handleDragStart);
+  bookCard.addEventListener("dragend", handleDragEnd);
 
-//   const moveForm = bookCard.querySelector("#move");
-//   const currentColumnId = bookCard.parentNode.id;
-//   moveForm.value = currentColumnId;
-//   moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
+  const columns = document.querySelectorAll(".column");
 
-//   const btnDelete = bookCard.querySelector(".btn__delete");
-//   btnDelete.addEventListener("click", deleteItem);
+  columns.forEach(column => {
+    column.addEventListener("dragover", handleDragOver);
+    column.addEventListener("dragenter", handleDragEnter);
+    column.addEventListener("dragleave", handleDragLeave);
+    column.addEventListener("drop", handleDragDrop);
+  });
+}
 
-//   bookCard.addEventListener("dragstart", handleDragStart);
-//   bookCard.addEventListener("dragend", handleDragEnd);
+function deleteCard(e) {
+  const card = e.target.parentNode;
+  const column = card.parentNode;
+  column.removeChild(card);
+}
 
-//   const columns = document.querySelectorAll(".column");
+function deleteItem(e) {
+  const card = e.target.parentNode;
+  const column = card.parentNode;
 
-//   columns.forEach(column => {
-//     column.addEventListener("dragover", handleDragOver);
-//     column.addEventListener("dragenter", handleDragEnter);
-//     column.addEventListener("dragleave", handleDragLeave);
-//     column.addEventListener("drop", handleDragDrop);
-//   });
-// }
+  column.removeChild(card);
+  Library.deleteBook(card);
+}
 
-// function changeBookCategory(bookCard, moveForm) {
-//   const moveFormValue = moveForm.value;
-//   const currentColumnId = bookCard.parentNode.id;
-//   const targetColumn = document.querySelector(`#${moveFormValue}`);
+// Handle drag
 
-//   if (moveFormValue != currentColumnId) {
-//     targetColumn.appendChild(bookCard);
-//     const library = JSON.parse(localStorage.getItem("library"));
-//     library.forEach(book => {
-//       if (book.title.toLowerCase() == bookCard.getAttribute("data-key").toLowerCase()) {
-//         book.column = moveFormValue;
-//         localStorage.setItem("library", JSON.stringify(library));
-//       }
-//     });
-//   }
-// }
-
-// function deleteItem(e) {
-//   const card = e.target.parentNode;
-//   const column = card.parentNode;
-
-//   column.removeChild(card);
-//   const library = JSON.parse(localStorage.getItem("library"));
-
-//   const filteredLibrary = library.filter(book => book.title.toLowerCase() != card.getAttribute("data-key").toLowerCase());
-//   localStorage.setItem("library", JSON.stringify(filteredLibrary));
-// }
-
-// //Fill inputs with placeholder book
-
-// function fillInputs() {
-//   titleInput.value = "God Is Not Great";
-//   authorInput.value = "Christopher Hitchens";
-//   yearInput.value = "2005";
-//   categoryInput.value = "Non-Fiction";
-//   columnInput.value = "backlog";
-// }
+let draggedCard = null;
+let draggedCardKey = null;
+let initialColumnId = null;
 
 
+function handleDragStart() {
+  setTimeout(() => {
+    this.style.display = "none";
+  }, 0);
 
-// // Handle drag
+  draggedCard = this;
+  draggedCardKey = this.getAttribute("data-key");
+  initialColumnId = this.parentNode.id;
+}
 
-// let draggedCard = null;
+function handleDragEnd() {
+  this.style.display = "block";
+}
 
-// function handleDragStart() {
-//   setTimeout(() => {
-//     this.style.display = "none";
-//   }, 0);
-//   draggedCard = this;
-//   console.log(draggedCard);
-// }
+function handleDragOver(e) {
+  e.preventDefault(e);
+}
 
-// function handleDragEnd() {
-//   this.style.display = "block";
-// }
+function handleDragEnter(e) {
+  this.classList.add("hovered");
+}
 
-// function handleDragOver(e) {
-//   e.preventDefault(e);
-// }
+function handleDragLeave() {
+  this.classList.remove("hovered");
+}
 
-// function handleDragEnter(e) {
-//   this.classList.add("hovered");
-// }
+function handleDragDrop(e) {
+  if (initialColumnId == e.target.id) {
+    return;
+  }
 
-// function handleDragLeave() {
-//   this.classList.remove("hovered");
-// }
+  const newColumnId = e.target.id;
+  const library = Library.get();
+  const book = library.find(b => {
+    return draggedCardKey == b.title;
+  });
+  const newBook = book;
+  newBook.column = newColumnId;
 
-// function handleDragDrop() {
-//   this.classList.remove("hovered");
-//   this.append(draggedCard);
-// }
+  Library.deleteBook(book);
+  Library.addBook(newBook);
+
+  this.classList.remove("hovered");
+  this.append(draggedCard);
+}
