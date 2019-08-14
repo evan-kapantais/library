@@ -9,9 +9,8 @@ const form = document.querySelector(".book-form");
 const btnAddBook = document.querySelector(".btn__add");
 const btnShowForm = document.querySelector(".btn__show");
 const btnCloseForm = document.querySelector(".btn__close");
-const mainHeading = document.querySelector(".main-heading");
 
-window.addEventListener("load", render);
+// window.addEventListener("load", render);
 btnAddBook.addEventListener("click", getFormInfo);
 
 const bookForm = {
@@ -70,10 +69,45 @@ const Library = (function(){
   return {get, set, addBook, removeBook, render};
 })();
 
-const Display = (function(){
+const Heading = (function(){
+
+  const mainHeading = document.querySelector(".main-heading");
+  mainHeading.addEventListener("keypress", handleMainHeading);
+  mainHeading.addEventListener("blur", handleMainHeading);
+
+  const get = () => {
+     return JSON.parse(localStorage.getItem("main-heading"));
+  }
+
+  const set = (heading) => {   
+    localStorage.setItem("main-heading", JSON.stringify(heading));
+  }
+
+  function handleMainHeading(e) {
+    if (e.type == "blur") {
+      mainHeading.innerText = e.target.innerText;
+      set(mainHeading.innerText);
+    } else if (e.type == "keypress") {
+      if (e.which == 13) {
+        mainHeading.innerText = e.target.innerText;
+        set(mainHeading.innerText);
+        e.target.blur();
+      }
+    }
+  }
+  
+  const render = (() => {
+    mainHeading.innerText = get();
+  })();
+
+})();
+
+
+
+// const Display = (function(){
 
   
-})();
+// })();
 
 class Book {
   constructor(title, author, year, category, column) {
@@ -103,180 +137,152 @@ function getFormInfo(e) {
   const book = new Book(toTitleCase(titleInput.value), toTitleCase(authorInput.value), 
   yearInput.value, categoryInput.value, columnInput.value);
 
-  addBookToLibrary(book);
-  // Library.addBook(book);
+  Library.addBook(book);
   renderBookCard(book);
   form.reset();
 }
 
-function addBookToLibrary(book) {
-  let library = [];
+// function render() {
 
-  if (localStorage.getItem("library") != null) {
-    library = JSON.parse(localStorage.getItem("library"));
-    library.push(book);
-    localStorage.setItem("library", JSON.stringify(library));
-  } else {
-    library.push(book);
-    localStorage.setItem("library", JSON.stringify(library));
-  }
-}
+//   const storedHeading = localStorage.getItem("main-heading");
+//   const mainHeadingElement = document.querySelector(".main-heading");
+//   const storedLibrary = localStorage.getItem("library");
 
-function render() {
+//   if (storedLibrary != null) {
+//     const library = JSON.parse(storedLibrary);
+//     library.forEach(book => {
+//       renderBookCard(book);
+//     });
+//   }
 
-  const storedHeading = localStorage.getItem("main-heading");
-  const mainHeadingElement = document.querySelector(".main-heading");
-  const storedLibrary = localStorage.getItem("library");
+//   if (storedHeading != null) {
+//     mainHeadingElement.innerText = storedHeading;
+//   }
+// }
 
-  if (storedLibrary != null) {
-    const library = JSON.parse(storedLibrary);
-    library.forEach(book => {
-      renderBookCard(book);
-    });
-  }
+// function renderBookCard(book) {
+//   const bookCard = document.createElement("div");
+//   bookCard.classList.add("book__card");
+//   bookCard.setAttribute("data-key", book.title);
+//   bookCard.setAttribute("draggable", true);
 
-  if (storedHeading != null) {
-    mainHeadingElement.innerText = storedHeading;
-  }
-}
+//   bookCard.innerHTML = `<button class="btn btn__delete">X</button>
+//                         <p class="book__title">${book.title}</p>
+//                         <p class="book__author">${book.author}</p>
+//                         <div class="book__footer">
+//                           <p class="book__year">${book.year}</p>
+//                           <p class="book__category">${book.category}</p>
+//                         </div>
+//                         <form name="move__form" class="move__form">
+//                           <select id="move">
+//                             <option value="">Move To...</option>
+//                             <option value="backlog">Backlog</option>
+//                             <option value="unread">Unread</option>
+//                             <option value="read">Read</option>
+//                           </select>
+//                         </form>`;
 
-function renderBookCard(book) {
-  const bookCard = document.createElement("div");
-  bookCard.classList.add("book__card");
-  bookCard.setAttribute("data-key", book.title);
-  bookCard.setAttribute("draggable", true);
+//   if (book.column == "backlog") {
+//       const backlogColumn = document.querySelector("#backlog");
+//       backlogColumn.appendChild(bookCard);
+//     } else if (book.column == "unread") {
+//       const unreadColumn = document.querySelector("#unread");
+//       unreadColumn.appendChild(bookCard);
+//     } else {
+//       const readColumn = document.querySelector("#read");
+//       readColumn.appendChild(bookCard);
+//     }
 
-  bookCard.innerHTML = `<button class="btn btn__delete">X</button>
-                        <p class="book__title">${book.title}</p>
-                        <p class="book__author">${book.author}</p>
-                        <div class="book__footer">
-                          <p class="book__year">${book.year}</p>
-                          <p class="book__category">${book.category}</p>
-                        </div>
-                        <form name="move__form" class="move__form">
-                          <select id="move">
-                            <option value="">Move To...</option>
-                            <option value="backlog">Backlog</option>
-                            <option value="unread">Unread</option>
-                            <option value="read">Read</option>
-                          </select>
-                        </form>`;
+//   const moveForm = bookCard.querySelector("#move");
+//   const currentColumnId = bookCard.parentNode.id;
+//   moveForm.value = currentColumnId;
+//   moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
 
-  if (book.column == "backlog") {
-      const backlogColumn = document.querySelector("#backlog");
-      backlogColumn.appendChild(bookCard);
-    } else if (book.column == "unread") {
-      const unreadColumn = document.querySelector("#unread");
-      unreadColumn.appendChild(bookCard);
-    } else {
-      const readColumn = document.querySelector("#read");
-      readColumn.appendChild(bookCard);
-    }
+//   const btnDelete = bookCard.querySelector(".btn__delete");
+//   btnDelete.addEventListener("click", deleteItem);
 
-  const moveForm = bookCard.querySelector("#move");
-  const currentColumnId = bookCard.parentNode.id;
-  moveForm.value = currentColumnId;
-  moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
+//   bookCard.addEventListener("dragstart", handleDragStart);
+//   bookCard.addEventListener("dragend", handleDragEnd);
 
-  const btnDelete = bookCard.querySelector(".btn__delete");
-  btnDelete.addEventListener("click", deleteItem);
+//   const columns = document.querySelectorAll(".column");
 
-  bookCard.addEventListener("dragstart", handleDragStart);
-  bookCard.addEventListener("dragend", handleDragEnd);
+//   columns.forEach(column => {
+//     column.addEventListener("dragover", handleDragOver);
+//     column.addEventListener("dragenter", handleDragEnter);
+//     column.addEventListener("dragleave", handleDragLeave);
+//     column.addEventListener("drop", handleDragDrop);
+//   });
+// }
 
-  const columns = document.querySelectorAll(".column");
+// function changeBookCategory(bookCard, moveForm) {
+//   const moveFormValue = moveForm.value;
+//   const currentColumnId = bookCard.parentNode.id;
+//   const targetColumn = document.querySelector(`#${moveFormValue}`);
 
-  columns.forEach(column => {
-    column.addEventListener("dragover", handleDragOver);
-    column.addEventListener("dragenter", handleDragEnter);
-    column.addEventListener("dragleave", handleDragLeave);
-    column.addEventListener("drop", handleDragDrop);
-  });
-}
+//   if (moveFormValue != currentColumnId) {
+//     targetColumn.appendChild(bookCard);
+//     const library = JSON.parse(localStorage.getItem("library"));
+//     library.forEach(book => {
+//       if (book.title.toLowerCase() == bookCard.getAttribute("data-key").toLowerCase()) {
+//         book.column = moveFormValue;
+//         localStorage.setItem("library", JSON.stringify(library));
+//       }
+//     });
+//   }
+// }
 
-function changeBookCategory(bookCard, moveForm) {
-  const moveFormValue = moveForm.value;
-  const currentColumnId = bookCard.parentNode.id;
-  const targetColumn = document.querySelector(`#${moveFormValue}`);
+// function deleteItem(e) {
+//   const card = e.target.parentNode;
+//   const column = card.parentNode;
 
-  if (moveFormValue != currentColumnId) {
-    targetColumn.appendChild(bookCard);
-    const library = JSON.parse(localStorage.getItem("library"));
-    library.forEach(book => {
-      if (book.title.toLowerCase() == bookCard.getAttribute("data-key").toLowerCase()) {
-        book.column = moveFormValue;
-        localStorage.setItem("library", JSON.stringify(library));
-      }
-    });
-  }
-}
+//   column.removeChild(card);
+//   const library = JSON.parse(localStorage.getItem("library"));
 
-function deleteItem(e) {
-  const card = e.target.parentNode;
-  const column = card.parentNode;
+//   const filteredLibrary = library.filter(book => book.title.toLowerCase() != card.getAttribute("data-key").toLowerCase());
+//   localStorage.setItem("library", JSON.stringify(filteredLibrary));
+// }
 
-  column.removeChild(card);
-  const library = JSON.parse(localStorage.getItem("library"));
+// //Fill inputs with placeholder book
 
-  const filteredLibrary = library.filter(book => book.title.toLowerCase() != card.getAttribute("data-key").toLowerCase());
-  localStorage.setItem("library", JSON.stringify(filteredLibrary));
-}
+// function fillInputs() {
+//   titleInput.value = "God Is Not Great";
+//   authorInput.value = "Christopher Hitchens";
+//   yearInput.value = "2005";
+//   categoryInput.value = "Non-Fiction";
+//   columnInput.value = "backlog";
+// }
 
-//Fill inputs with placeholder book
 
-function fillInputs() {
-  titleInput.value = "God Is Not Great";
-  authorInput.value = "Christopher Hitchens";
-  yearInput.value = "2005";
-  categoryInput.value = "Non-Fiction";
-  columnInput.value = "backlog";
-}
 
-mainHeading.addEventListener("keypress", handleMainHeading);
-mainHeading.addEventListener("blur", handleMainHeading);
+// // Handle drag
 
-function handleMainHeading(e) {
-  if (e.type == "blur") {
-    mainHeading.innerText = e.target.innerText;
-    localStorage.setItem("main-heading", mainHeading.innerText);
-  } else if (e.type == "keypress") {
-    if (e.which == 13) {
-      mainHeading.innerText = e.target.innerText;
-      localStorage.setItem("main-heading", mainHeading.innerText);
-      e.target.blur();
-    }
-  }
-}
+// let draggedCard = null;
 
-// Handle drag
+// function handleDragStart() {
+//   setTimeout(() => {
+//     this.style.display = "none";
+//   }, 0);
+//   draggedCard = this;
+//   console.log(draggedCard);
+// }
 
-let draggedCard = null;
+// function handleDragEnd() {
+//   this.style.display = "block";
+// }
 
-function handleDragStart() {
-  setTimeout(() => {
-    this.style.display = "none";
-  }, 0);
-  draggedCard = this;
-  console.log(draggedCard);
-}
+// function handleDragOver(e) {
+//   e.preventDefault(e);
+// }
 
-function handleDragEnd() {
-  this.style.display = "block";
-}
+// function handleDragEnter(e) {
+//   this.classList.add("hovered");
+// }
 
-function handleDragOver(e) {
-  e.preventDefault(e);
-}
+// function handleDragLeave() {
+//   this.classList.remove("hovered");
+// }
 
-function handleDragEnter(e) {
-  this.classList.add("hovered");
-}
-
-function handleDragLeave() {
-  this.classList.remove("hovered");
-}
-
-function handleDragDrop() {
-  this.classList.remove("hovered");
-  this.append(draggedCard);
-}
+// function handleDragDrop() {
+//   this.classList.remove("hovered");
+//   this.append(draggedCard);
+// }
