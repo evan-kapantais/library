@@ -156,7 +156,7 @@ body {
 .book__card {
   position: relative;
   box-shadow: 3px 3px var(--main-grey);
-  padding: 15px;
+  padding: 10px;
   border: 1px solid var(--main-grey);
   margin-bottom: 15px;
   text-transform: capitalize;
@@ -187,9 +187,9 @@ body {
   width: 80%;
 }
 
-.book__year,
-.book__category {
+.book__author {
   font-size: 14px;
+  width: 80%;
 }
 
 .book__category {
@@ -203,16 +203,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.move__form > select {
-  padding: 2px;
-  width: 100%;
-  opacity: .5;
-}
-
-.move__form > select:hover {
-  opacity: 1;
+  font-size: 12px;
 }
 
 /* Intro Page */

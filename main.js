@@ -171,23 +171,15 @@ function renderBookCard(book) {
                         <div class="book__footer">
                           <p class="book__year">${book.year}</p>
                           <p class="book__category">${book.category}</p>
-                        </div>
-                        <form name="move__form" class="move__form">
-                          <select id="move">
-                            <option value="">Move To...</option>
-                            <option value="backlog">Backlog</option>
-                            <option value="unread">Unread</option>
-                            <option value="read">Read</option>
-                          </select>
-                        </form>`;
+                        </div>`;
 
   const targetColumn = document.querySelector(`#${book.column}`);
   targetColumn.appendChild(bookCard);
 
   const moveForm = bookCard.querySelector("#move");
   const currentColumnId = bookCard.parentNode.id;
-  moveForm.value = currentColumnId;
-  moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
+  // moveForm.value = currentColumnId;
+  // moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
 
   const btnDelete = bookCard.querySelector(".btn__delete");
   btnDelete.addEventListener("click", deleteItem);
