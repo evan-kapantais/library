@@ -67,6 +67,46 @@ const BookForm = (function(){
 
 })();
 
+const Card = (function(book){
+
+  function createCard(book) {
+    const card = document.createElement("div");
+    card.classList.add("book__card");
+    card.setAttribute("data-key", book.title);
+    card.setAttribute("draggable", true);
+    
+    card.innerHTML = `<button class="btn btn__delete">X</button>
+                          <p class="book__title">${book.title}</p>
+                          <p class="book__author">${book.author}</p>
+                          <div class="book__footer">
+                            <p class="book__year">${book.year}</p>
+                            <p class="book__category">${book.category}</p>
+                          </div>`;
+
+    const targetColumn = document.querySelector(`#${book.column}`);
+    targetColumn.appendChild(card);
+    
+    const btnDelete = card.querySelector(".btn__delete");
+    btnDelete.addEventListener("click", Card.deleteItem);
+    
+    card.addEventListener("dragstart", handleDragStart);
+    card.addEventListener("dragend", handleDragEnd);
+    
+    const columns = document.querySelectorAll(".column");
+    
+    columns.forEach(column => {
+      column.addEventListener("dragover", handleDragOver);
+      column.addEventListener("dragenter", handleDragEnter);
+      column.addEventListener("dragleave", handleDragLeave);
+      column.addEventListener("drop", handleDragDrop);
+    });
+
+    return card;
+  }
+
+  return {createCard};
+})();
+
 const Library = (function(){
   
   const get = () => {
@@ -90,17 +130,22 @@ const Library = (function(){
     }
   }
 
+  const getBook = (title) => {
+    const library = get();
+    return library.find(book => book.title == title);
+  }
+
   const deleteBook = (book) => {
     set(get().filter(b => b.title != book.title));
   }
 
   const render = (() => {
     get().forEach(book => {
-      renderBookCard(book);
+      Card.createCard(book);
     });
   })();
 
-  return {get, set, addBook, deleteBook, render};
+  return {get, set, addBook, getBook, deleteBook, render};
 })();
 
 const Heading = (function(){
@@ -136,79 +181,14 @@ const Heading = (function(){
 
 })();
 
-const Display = (function(){
-
-})();
-
-class Card {
-  constructor(book) {
-    // this.title = book.title;
-    // this.author = book.author;
-    // this.year = book.year;
-    // this.category = book.category;
-    // this.column = book.column;
-
-    const {title, author, year, category, column} = book;
-  }
-
-  // render() {
-  //   const bookCard = document.createElement("div");
-  //   bookCard.classList.add("book__card");
-  //   bookCard.setAttribute("data-key", title);
-  //   bookCard.setAttribute("draggable", true);
-  // }
-}
-
-function renderBookCard(book) {
-  const bookCard = document.createElement("div");
-  bookCard.classList.add("book__card");
-  bookCard.setAttribute("data-key", book.title);
-  bookCard.setAttribute("draggable", true);
-
-  bookCard.innerHTML = `<button class="btn btn__delete">X</button>
-                        <p class="book__title">${book.title}</p>
-                        <p class="book__author">${book.author}</p>
-                        <div class="book__footer">
-                          <p class="book__year">${book.year}</p>
-                          <p class="book__category">${book.category}</p>
-                        </div>`;
-
-  const targetColumn = document.querySelector(`#${book.column}`);
-  targetColumn.appendChild(bookCard);
-
-  const moveForm = bookCard.querySelector("#move");
-  const currentColumnId = bookCard.parentNode.id;
-  // moveForm.value = currentColumnId;
-  // moveForm.addEventListener("change", () => changeBookCategory(bookCard, moveForm));
-
-  const btnDelete = bookCard.querySelector(".btn__delete");
-  btnDelete.addEventListener("click", deleteItem);
-
-  bookCard.addEventListener("dragstart", handleDragStart);
-  bookCard.addEventListener("dragend", handleDragEnd);
-
-  const columns = document.querySelectorAll(".column");
-
-  columns.forEach(column => {
-    column.addEventListener("dragover", handleDragOver);
-    column.addEventListener("dragenter", handleDragEnter);
-    column.addEventListener("dragleave", handleDragLeave);
-    column.addEventListener("drop", handleDragDrop);
-  });
-}
-
-function deleteCard(e) {
-  const card = e.target.parentNode;
-  const column = card.parentNode;
-  column.removeChild(card);
-}
-
 function deleteItem(e) {
   const card = e.target.parentNode;
+  const cardTitle = card.getAttribute("data-key");
   const column = card.parentNode;
-
+  const book = Library.getBook(cardTitle);
+  
   column.removeChild(card);
-  Library.deleteBook(card);
+  Library.deleteBook(book);
 }
 
 // Handle drag
