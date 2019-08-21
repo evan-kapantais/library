@@ -9,33 +9,26 @@ class Book {
 }
 
 const BookForm = (function(){
-  
+
+  const formOverlay = document.querySelector(".form__overlay");
   const form = document.querySelector(".book-form");
-  const titleInput = document.querySelector("#title");
-  const authorInput = document.querySelector("#author");
-  const yearInput = document.querySelector("#year");
-  const categoryInput = document.querySelector("#category");
+  const titleInput = form.querySelector("#title");
+  const authorInput = form.querySelector("#author");
+  const yearInput = form.querySelector("#year");
+  const categoryInput = form.querySelector("#category");
   const btnShowForm = document.querySelector(".btn__show");
   const btnCloseForm = document.querySelector(".btn__close");
-  const btnAddBook = document.querySelector(".btn__add");
-  const btnFillBook = document.querySelector(".btn__fill");
+  const btnAddBook = form.querySelector(".btn__add");
+  const btnFillBook = form.querySelector(".btn__fill");
   
   const showForm = () => {
-    setTimeout(() => {
-      form.classList.add("shown");
-    }, 200);
-    form.style.display = "flex";
-    form.style.width = "250px";
-    btnShowForm.setAttribute("disabled", true);
+    formOverlay.classList.add("shown");
+    document.body.style.overflow = "hidden";
   }
-
+  
   const closeForm = () => {
-    setTimeout(() => {
-      form.style.width = 0;
-      form.style.display = "none";
-    }, 200);
-    form.classList.remove("shown");
-    btnShowForm.removeAttribute("disabled");
+    formOverlay.classList.remove("shown");
+    document.body.style.overflow = "auto";
   }
 
   const toTitleCase = (str) => {
@@ -61,6 +54,7 @@ const BookForm = (function(){
     } else {
       Library.addBook(book);
       Card.createCard(book);
+      closeForm();
     }
 
     form.reset();
