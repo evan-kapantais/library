@@ -260,6 +260,7 @@ function handleDragLeave() {
 
 function handleDragDrop(e) {
   if (initialColumnId == e.target.id) {
+    this.classList.remove("hovered");
     return;
   }
 
