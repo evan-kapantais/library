@@ -8,6 +8,22 @@ class Book {
   }
 }
 
+const btnBannerArrow = document.querySelector(".btn__banner");
+
+btnBannerArrow.addEventListener("click", toggleBanner);
+
+function toggleBanner() {
+  const banner = document.querySelector(".banner");
+  
+  if (banner.classList.contains("hidden")) {
+    banner.classList.remove("hidden");
+    this.classList.remove("hidden");
+  } else {
+    banner.classList.add("hidden");
+    this.classList.add("hidden");
+  }
+}
+
 const BookForm = (function(){
 
   const formOverlay = document.querySelector(".form__overlay");
@@ -50,7 +66,7 @@ const BookForm = (function(){
 
     if (isDuplicate) {
       foundColumn = isDuplicate;
-      alert(`Book already exists in your library.`);
+      alert("Book already exists in your library.");
     } else {
       Library.addBook(book);
       Card.createCard(book);
