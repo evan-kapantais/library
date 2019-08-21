@@ -15,7 +15,6 @@ const BookForm = (function(){
   const authorInput = document.querySelector("#author");
   const yearInput = document.querySelector("#year");
   const categoryInput = document.querySelector("#category");
-  const columnInput = document.querySelector("#column");
   const btnShowForm = document.querySelector(".btn__show");
   const btnCloseForm = document.querySelector(".btn__close");
   const btnAddBook = document.querySelector(".btn__add");
@@ -45,11 +44,36 @@ const BookForm = (function(){
   const getFormInfo = (e) => {
     e.preventDefault();
     const book = new Book(toTitleCase(titleInput.value), toTitleCase(authorInput.value), 
-    yearInput.value, categoryInput.value, columnInput.value);
-    
-    Library.addBook(book);
-    renderBookCard(book);
+    yearInput.value, categoryInput.value, "backlog");
+
+    const isDuplicate = checkForDuplicate(book);
+    console.log(isDuplicate);
+
+    if (book.title == "") {
+      alert("Please add a title to your book.");
+      return false;
+    }
+
+    if (isDuplicate) {
+      foundColumn = isDuplicate;
+      alert(`Book already exists in your library.`);
+    } else {
+      Library.addBook(book);
+      Card.createCard(book);
+    }
+
     form.reset();
+  }
+
+  function checkForDuplicate(book) {
+    const library = Library.get();
+    const found = library.find(b => b.title == book.title);
+    
+    if (found == undefined) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   const fillInputs = () => {
@@ -57,7 +81,6 @@ const BookForm = (function(){
       authorInput.value = "Christopher Hitchens";
       yearInput.value = "2005";
       categoryInput.value = "Non-Fiction";
-      columnInput.value = "backlog";
     }
   
   btnShowForm.addEventListener("click", showForm);
@@ -87,7 +110,7 @@ const Card = (function(book){
     targetColumn.appendChild(card);
     
     const btnDelete = card.querySelector(".btn__delete");
-    btnDelete.addEventListener("click", Card.deleteItem);
+    btnDelete.addEventListener("click", deleteItem);
     
     card.addEventListener("dragstart", handleDragStart);
     card.addEventListener("dragend", handleDragEnd);
