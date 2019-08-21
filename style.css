@@ -84,13 +84,16 @@ body {
 
 .container {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
   justify-content: center;
   border-top: 1px solid var(--main-background);
+  overflow-x: scroll;
 }
 
 .column {
-  width: 300px;
+  width: 250px;
+  min-width: 250px;
   padding: 10px;
   margin: 0 10px;
 }
@@ -140,6 +143,7 @@ body {
 
 .book-form > label {
   margin-bottom: 5px;
+  font-size: 14px;
 }
 
 .book-form > input,

@@ -24,13 +24,15 @@ const BookForm = (function(){
     setTimeout(() => {
       form.classList.add("shown");
     }, 200);
-    form.style.width = "300px";
+    form.style.display = "flex";
+    form.style.width = "250px";
     btnShowForm.setAttribute("disabled", true);
   }
 
   const closeForm = () => {
     setTimeout(() => {
       form.style.width = 0;
+      form.style.display = "none";
     }, 200);
     form.classList.remove("shown");
     btnShowForm.removeAttribute("disabled");
@@ -47,7 +49,6 @@ const BookForm = (function(){
     yearInput.value, categoryInput.value, "backlog");
 
     const isDuplicate = checkForDuplicate(book);
-    console.log(isDuplicate);
 
     if (book.title == "") {
       alert("Please add a title to your book.");
